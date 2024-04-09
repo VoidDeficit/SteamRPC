@@ -10,32 +10,37 @@ const resources = {
     }
 };
 
+let lastSteamRichPresence = null; // Variable for tracking the previous Steam Rich Presence status
+let startTime = null; // Variable for saving the start time
+
 export function translateSteamPresence(steamRichPresence) {
     let discordRichPresence = {};
 
     discordRichPresence.largeImageKey = resources.cover;
     discordRichPresence.details = steamRichPresence;
 
+    // Check whether this is the first update or a change in the Steam Rich Presence status
+    if (lastSteamRichPresence !== steamRichPresence) {
+        startTime = Math.floor(Date.now() / 1000); // Update start time when the status changes
+    }
+
+    discordRichPresence.startTimestamp = startTime; // Set startTimestamp to the saved start time
+
     switch(steamRichPresence) {
         case "Tutorial Mission":
-            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Tutorial";
-            discordRichPresence.startTimestamp = Math.floor(Date.now() / 1000);;
             break;
         case "Fighting Terminids":
-            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Fighting Terminids";
             discordRichPresence.smallImageKey = resources.icons.terminids;
-            discordRichPresence.startTimestamp = Math.floor(Date.now() / 1000);;
             break;
         case "Fighting Automatons":
-            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Fighting Automatons";
             discordRichPresence.smallImageKey = resources.icons.automatons;
-            discordRichPresence.startTimestamp = Math.floor(Date.now() / 1000);;
             break;
-
     }
+
+    lastSteamRichPresence = steamRichPresence; // Update the last Steam Rich Presence status
 
     return discordRichPresence;
 }
