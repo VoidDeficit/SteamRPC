@@ -4,6 +4,7 @@ import DiscordRPC from "@xhayper/discord-rpc";
 import SteamID from "steamid";
 import fetch from "node-fetch";
 import LogUpdate from "log-update";
+import * as cheerio from 'cheerio'; 
 
 import config from "./config.js";
 
@@ -74,6 +75,24 @@ async function getSteamUserId() {
     }
 }
 
+async function getJoinButtonLink() {
+    try {
+        const response = await fetch(config.steam_profile_url);
+        const html = await response.text();
+
+        const $ = cheerio.load(html);
+
+        // Find the "Join" button link
+        const joinButton = $('a.btn_green_white_innerfade');
+        
+        const joinButtonLink = joinButton.attr('href');
+        return joinButtonLink;
+
+    } catch (error) {
+        return null; // Return null to indicate failure
+    }
+}
+
 async function loadProfiles() {
     let profiles = {};
 
@@ -132,8 +151,10 @@ async function pollSteamPresence(steamUserId, profiles) {
                             else if(discordRPCClient.clientId !== clientId) {
                                 discordRPCClient.login({clientId});
                             }
+
+                            const joinlink = await getJoinButtonLink();
     
-                            let translatedDiscordRPC = profile.translateSteamPresence(currentSteamStatus, discordRPCClient);
+                            let translatedDiscordRPC = profile.translateSteamPresence(currentSteamStatus, joinlink);
 
                             if (typeof translatedDiscordRPC !== "object") 
                                 throw `Profile returned '${typeof translatedDiscordRPC}' instead of an object.`;
