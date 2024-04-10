@@ -1,20 +1,25 @@
 import { readdir } from "node:fs/promises";
+
 import DiscordRPC from "@xhayper/discord-rpc";
 import SteamID from "steamid";
 import fetch from "node-fetch";
 import LogUpdate from "log-update";
-import dotenv from "dotenv";
 
-dotenv.config();
 
 // ==================== Configuration Settings =====================
 // Steam user identification
-const steamProfileURL = process.env.STEAM_PROFILE_URL;
-const steamWebKey = process.env.STEAM_WEB_KEY;
-const discordClientId = process.env.DISCORD_CLIENT_ID;
+
+// You'll need to find your own SteamID64 URL using https://steamrep.com
+// Note: This also allows custom URLs like https://steamcommunity.com/id/crementif but they require providing a valid web key.
+const steamProfileURL = "https://steamcommunity.com/profiles/76561198259089872";
+
+// ONLY needs to be replaced if you use a custom URL in the steamProfileURL variable above. There's no real benefit!
+// You can get one from https://steamcommunity.com/dev/apikey. Use localhost as the domain name.
+const steamWebKey = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 // Advanced Configuration Settings
 const pollRate = 20*1000; // Poll Steam Rich Presence every n seconds. You should keep this at or above 20 seconds.
+const discordClientId = "433731243516100629"; // Keep this id unless you want to supply your own application id.
 
 // =================================================================
 // Initialize Status Variables
