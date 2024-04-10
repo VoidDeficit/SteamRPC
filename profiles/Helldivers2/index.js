@@ -28,13 +28,16 @@ export function translateSteamPresence(steamRichPresence) {
 
     switch(steamRichPresence) {
         case "Tutorial Mission":
+            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Tutorial";
             break;
         case "Fighting Terminids":
+            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Fighting Terminids";
             discordRichPresence.smallImageKey = resources.icons.terminids;
             break;
         case "Fighting Automatons":
+            discordRichPresence.details = "In a mission";
             discordRichPresence.state = "Fighting Automatons";
             discordRichPresence.smallImageKey = resources.icons.automatons;
             break;
