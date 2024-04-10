@@ -13,7 +13,7 @@ const resources = {
 let lastSteamRichPresence = null; // Variable for tracking the previous Steam Rich Presence status
 let startTime = null; // Variable for saving the start time
 
-export function translateSteamPresence(steamRichPresence) {
+export function translateSteamPresence(steamRichPresence, joinButtonLink) {
     let discordRichPresence = {};
 
     discordRichPresence.largeImageKey = resources.cover;
@@ -43,6 +43,13 @@ export function translateSteamPresence(steamRichPresence) {
             break;
     }
 
+    if (joinButtonLink !== null)
+    {
+        discordRichPresence.buttons = [
+            { label: 'Join', url: joinButtonLink }
+        ];
+    }
+        
     lastSteamRichPresence = steamRichPresence; // Update the last Steam Rich Presence status
 
     return discordRichPresence;
